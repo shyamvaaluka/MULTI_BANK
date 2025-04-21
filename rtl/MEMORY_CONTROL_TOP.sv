@@ -42,7 +42,6 @@ module memory_top#( parameter DATA_WIDTH   = 12,
 	                    input  [ADDR_WIDTH-1:0] i_addrb,                   
 	                    input  [DATA_WIDTH-1:0] i_data_in_a,               
 	                    input  [DATA_WIDTH-1:0] i_data_in_b,               
-                      output                  o_dbit_err_a,o_dbit_err_b, 
 	                    output [DATA_WIDTH-1:0] o_dout_a,                  
 	                    output [DATA_WIDTH-1:0] o_dout_b                   
                    );
