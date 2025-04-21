@@ -1,41 +1,47 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  File name         : latency_ram_top.sv                                                                             //
-//  Version           : 0.2                                                                                            //    
-//                                                                                                                     //
-//  parameters used   : WR_LATENCYA : Write latency of port-a                                                          //
-//                      WR_LATENCYB : Write latency of port-b                                                          //
-//                      RD_LATENCYA : Read latency of port-a                                                           //
-//                      RD_LATENCYB : Read latency of port-b                                                           //
-//                      DATA_WIDTH  : Width of the data                                                                //
-//                      ADDR_WIDTH  : Width of the address                                                             //
-//                      MEM_DEPTH   : Depth of the DP RAM                                                              //
-//                                                                                                                     //
-//  File Description  : This is the top module of the latency feature of the DP-RAM, that connects                     //
-//                      the latency module to the normal Dual-Port RAM module.                                         //
-//                                                                                                                     //  
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//  File name         : latency_ram_top.sv                                                          //
+//  Version           : 0.2                                                                         //    
+//                                                                                                  //
+//  parameters used   : WR_LATENCYA : Write latency of port-a                                       //
+//                      WR_LATENCYB : Write latency of port-b                                       //
+//                      RD_LATENCYA : Read latency of port-a                                        //
+//                      RD_LATENCYB : Read latency of port-b                                        //
+//                      DATA_WIDTH  : Width of the data                                             //
+//                      ADDR_WIDTH  : Width of the address                                          //
+//                      MEM_DEPTH   : Depth of the DP RAM                                           // 
+//                                                                                                  //
+//  Signals Used      : i_wea,i_web     : Write enable signals for port-a and port-b.               //
+//                      i_ena,i_enb     : Enable signals for port-a and port-b.                     //
+//                      clka,clkb       : Clock inputs for port-a and port-b.                       //
+//                      i_dina,i_dinb   : Data inputs for port-a and port-b.                        //
+//                      i_addra,i_addrb : Address inputs for port-a and port-b.                     //
+//                      o_douta,o_doutb : Output data for port-a and port-b.                        //                                                             
+//                                                                                                  //
+//  File Description  : This is the top module of the latency feature of the DP-RAM, that connects  //
+//                      the latency module to the normal Dual-Port RAM module.                      //
+//                                                                                                  //  
+////////////////////////////////////////////////////////////////////////////////////////////////////// 
 
-module latency_top#(  parameter WR_LATENCYA = 1,
-                      parameter WR_LATENCYB = 1,
-                      parameter RD_LATENCYA = 1,
-                      parameter RD_LATENCYB = 1,
-                      parameter DATA_WIDTH  = 8,
-                      parameter ADDR_WIDTH  = $clog2(MEM_DEPTH),
-                      parameter MEM_DEPTH   = 16,
-                      parameter PARITY_BITS = $clog2(DATA_WIDTH)+1,
-                      parameter ENCODED_WORD = DATA_WIDTH + PARITY_BITS)( input                     i_wea,i_web,     // Write enable signals for port-a and port-b.
-                                                                          input                     i_ena,i_enb,     // Enable signals for port-a and port-b.
-                                                                          input                     clka,clkb,       // Clock inputs for port-a and port-b.
-                                                                          input  [DATA_WIDTH-1:0] i_dina,i_dinb,   // Data inputs for port-a and port-b.
-                                                                          input  [ADDR_WIDTH-1:0]   i_addra,i_addrb, // Address inputs for port-a and port-b.
-                                                                          output [DATA_WIDTH-1:0] o_douta,o_doutb  // Output data for port-a and port-b.
-                                                                        );
+module latency_top#(  parameter WR_LATENCYA   = 1,
+                      parameter WR_LATENCYB   = 1,
+                      parameter RD_LATENCYA   = 1,
+                      parameter RD_LATENCYB   = 1,
+                      parameter DATA_WIDTH    = 8,
+                      parameter ADDR_WIDTH    = $clog2(MEM_DEPTH),
+                      parameter MEM_DEPTH     = 16
+                      )( input                   i_wea,i_web,     
+                         input                   i_ena,i_enb,     
+                         input                   clka,clkb,       
+                         input  [DATA_WIDTH-1:0] i_dina,i_dinb,   
+                         input  [ADDR_WIDTH-1:0] i_addra,i_addrb, 
+                         output [DATA_WIDTH-1:0] o_douta,o_doutb   
+                       );
 
   wire [DATA_WIDTH-1:0] mem_douta,mem_doutb;               //outputs of memory comes to these wires.
   wire [DATA_WIDTH-1:0] latency_dina,latency_dinb;         //these wires are connected to i_dina and i_dinb of dp ram.
-  wire [ADDR_WIDTH-1:0]   latency_wr_addra,latency_wr_addrb; //these wires are connected to i_addra_wr and i_addrb_wr of dp ram.
-  wire                    latency_wea,latency_web;           //these wires are connected to i_we_a and i_we_b of dp ram.
-  wire                    latency_wr_ena,latency_wr_enb;     //these wires are connected to i_ena_wr and i_enb_wr of dp ram.
+  wire [ADDR_WIDTH-1:0] latency_wr_addra,latency_wr_addrb; //these wires are connected to i_addra_wr and i_addrb_wr of dp ram.
+  wire                  latency_wea,latency_web;           //these wires are connected to i_we_a and i_we_b of dp ram.
+  wire                  latency_wr_ena,latency_wr_enb;     //these wires are connected to i_ena_wr and i_enb_wr of dp ram.
 
 
   //The latency module delays all the write operation related signals by write

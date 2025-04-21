@@ -1,26 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  File name         : sel_latency.sv                                                                                 //
-//  Version           : 0.2                                                                                            //
-//                                                                                                                     //
-//  parameters used   : READ_LATENCYA : Read latency of port-a                                                         //
-//                      READ_LATENCYB : Read latency of port-b                                                         //
-//                      ADDR_WIDTH1   : Nth bit of address from the top module                                         //
-//                      ADDR_WIDTH2   : N-1 bit of address from the top module                                         //                      
-//                                                                                                                     //
-//  File Description  : This is the select latency module that delays the select lines of the                          //
-//                      data_routing 4x1 output mulitplexer by read_latency. Based on                                  //
-//                      this latency the mux routes data from each bank onto single channel by read                    //  
-//                      latency parameter.                                                                             //                                                                          
-//                                                                                                                     //  
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  File name         : sel_latency.sv                                                                //
+//  Version           : 0.2                                                                           //
+//                                                                                                    //
+//  parameters used   : READ_LATENCYA : Read latency of port-a                                        //
+//                      READ_LATENCYB : Read latency of port-b                                        //
+//                      ADDR_WIDTH1   : Nth bit of address from the top module                        //
+//                      ADDR_WIDTH2   : N-1 bit of address from the top module                        //  
+//                                                                                                    //
+//  Signals Used      : i_sel_in_a,i_sel_in_b   : Select inputs for port-a and port-b.                //
+//                      o_sel_out_a,o_sel_out_b : Delayed select outputs for port-a and port-b.       //
+//                                                                                                    //
+//  File Description  : This is the select latency module that delays the select lines of the         //
+//                      data_routing 4x1 output mulitplexer by read_latency. Based on                 //
+//                      this latency the mux routes data from each bank onto single channel by read   //  
+//                      latency parameter.                                                            //                                                                          
+//                                                                                                    //  
+//////////////////////////////////////////////////////////////////////////////////////////////////////// 
 
 module sel_latency#(  parameter READ_LATENCYA = 2,
 	                    parameter READ_LATENCYB = 2,
 	                    parameter ADDR_WIDTH1   = 2,
 	                    parameter ADDR_WIDTH2   = 1
-                   )( input clka,clkb,
-	                    input      [ADDR_WIDTH1-1:ADDR_WIDTH2-1] i_sel_in_a,i_sel_in_b,  //Select inputs for port-a and port-b.
-	                    output reg [ADDR_WIDTH1-1:ADDR_WIDTH2-1] o_sel_out_a,o_sel_out_b //Delayed select outputs for port-a and port-b.
+                   )( input                                    clka,clkb,
+	                    input      [ADDR_WIDTH1-1:ADDR_WIDTH2-1] i_sel_in_a,i_sel_in_b,  
+	                    output reg [ADDR_WIDTH1-1:ADDR_WIDTH2-1] o_sel_out_a,o_sel_out_b 
                     );
 
 	reg [ADDR_WIDTH1-1:ADDR_WIDTH2-1] latched1; //Internal variable to latch and delay the input signal of port-a by 1 clock cycle.

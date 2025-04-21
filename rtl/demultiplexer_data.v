@@ -1,24 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  File name         : demultiplexer_data.v                                                                           //
-//  Version           : 0.2                                                                                            //
-//                                                                                                                     //
-//  parameters used   : DATA_WIDTH         : Width of the data                                                         //
-//                      SELECT_DATA_WIDTH1 : Nth bit of address from the top module                                    //
-//                      SELECT_DATA_WIDTH2 : N-1 bit of the address from the top module                                //
-//                                                                                                                     //
-//  File Description  : This demultiplexer data module routes data to the corresponding bank based                     //
-//                      on the bank selected by the selection decoder module.                                          //
-//                                                                                                                     //  
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  File name         : demultiplexer_data.v                                                             //
+//  Version           : 0.2                                                                              //
+//                                                                                                       //
+//  parameters used   : DATA_WIDTH         : Width of the data                                           //
+//                      SELECT_DATA_WIDTH1 : Nth bit of address from the top module                      //
+//                      SELECT_DATA_WIDTH2 : N-1 bit of the address from the top module                  // 
+//                                                                                                       //
+//  Signals Used      : i_data              : Input data for routing.                                    //
+//                      i_sel               : Select line to select one bank for the data to be routed.  //
+//                      o_y0,o_y1,o_y2,o_y3 : Output channels that contains the data inputs.             //
+//                                                                                                       // 
+//                                                                                                       //
+//  File Description  : This demultiplexer data module routes data to the corresponding bank based       //
+//                      on the bank selected by the selection decoder module.                            //
+//                                                                                                       //  
+/////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 
 module demultiplexer_data#( parameter DATA_WIDTH         = 8,
                             parameter SELECT_DATA_WIDTH1 = 2,
-                            parameter SELECT_DATA_WIDTH2 = 1,
-                            parameter PARITY_BITS        = $clog2(DATA_WIDTH)+1,
-                            parameter ENCODED_WORD       = DATA_WIDTH + PARITY_BITS
-                          )(  input      [DATA_WIDTH-1:0]                           i_data,             // Input data for routing.
-                              input      [SELECT_DATA_WIDTH1-1:SELECT_DATA_WIDTH2-1]  i_sel,              // Select line to select one bank for the data to be routed.
-                              output reg [DATA_WIDTH-1:0]                           o_y0,o_y1,o_y2,o_y3 // Output channels that contains the data inputs. 
+                            parameter SELECT_DATA_WIDTH2 = 1
+                          )(  input      [DATA_WIDTH-1:0]                            i_data,             
+                              input      [SELECT_DATA_WIDTH1-1:SELECT_DATA_WIDTH2-1] i_sel,              
+                              output reg [DATA_WIDTH-1:0]                            o_y0,o_y1,o_y2,o_y3 
                            );
   
 

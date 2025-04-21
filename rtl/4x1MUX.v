@@ -1,25 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  File name        : 4x1MUX.v                                                                                        //
-//  Version          : 0.2                                                                                             //
-//                                                                                                                     //
-//  parameters used  : DATA_WIDTH : Width of the data being routed                                                     //
-//                     ADDR_1     : Value of the Nth bit of the top module address                                     //
-//                     ADDR_2     : Value of N-1 bit of the top module address                                         //
-//                                                                                                                     //
-//  File Description : This multiplexer module routes all the output data from each bank(4 banks in                    //
-//                     total) onto one single output channel. This is a latched mux where the                          //
-//                     select lines control the data routing based on read latency parameter.                          //  
-//                                                                                                                     //  
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  File name        : 4x1MUX.v                                                                                   //
+//  Version          : 0.2                                                                                        //
+//                                                                                                                //
+//  parameters used  : DATA_WIDTH : Width of the data being routed.                                               //
+//                     ADDR_1     : Value of the Nth bit of the top module address.                               //
+//                     ADDR_2     : Value of N-1 bit of the top module address.                                   //        
+//                                                                                                                //
+//  Signals used     : i_i0,i_i1,i_i2,i_i3 : Data inputs to be routed onto single channel output.                 //
+//                     i_sel               : Select line that selects one of 4 inputs to be routed.               //                                                                                               
+//                     o_Y                 : Output channel where the data is transmitted to the single channel.  //   
+//                                                                                                                //
+//  File Description : This multiplexer module routes all the output data from each bank(4 banks in               //
+//                     total) onto one single output channel. This is a latched mux where the                     //
+//                     select lines control the data routing based on read latency parameter.                     //  
+//                                                                                                                //  
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 
-module MUX_4x1#(  parameter DATA_WIDTH   = 8,
-                	parameter ADDR_1       = 5,
-	                parameter ADDR_2       = 4,
-                  parameter PARITY_BITS  = $clog2(DATA_WIDTH)+1,
-                  parameter ENCODED_WORD = DATA_WIDTH + PARITY_BITS
-               )( input      [DATA_WIDTH-1:0]  i_i0,i_i1,i_i2,i_i3, // Data inputs to be routed onto single channel output.
-                	input      [ADDR_1-1:ADDR_2-1] i_sel,               // Select line that selects one of 4 inputs to be routed.
-	                output reg [DATA_WIDTH-1:0]  o_Y                  // Output channel where the data is transmitted to the single channel.
+module MUX_4x1#(  parameter DATA_WIDTH    = 8,
+                	parameter ADDR_1        = 5,
+	                parameter ADDR_2        = 4
+               )( input      [DATA_WIDTH-1:0]    i_i0,i_i1,i_i2,i_i3, 
+                	input      [ADDR_1-1:ADDR_2-1] i_sel,               
+	                output reg [DATA_WIDTH-1:0]    o_Y                  
                 );
   
   // This procedural block routes one of the 4 data inputs to the single

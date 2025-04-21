@@ -1,19 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  File name        : Decoder_enable_lines.v                                                                          //
-//  Version          : 0.2                                                                                             //
-//                                                                                                                     //
-//  parameters used  : SELECT_ADDR1 : Value of the Nth bit of the address from the top module                          //
-//                     SELECT_ADDR2 : Value of N-1 bit of the address from the top module                              //
-//                                                                                                                     //
-//  File Description : This is a 2x4 selection decoder module that selects a certain bank at a time                    //
-//                     based on the first two bits of the input address given from the top module.                     //
-//                                                                                                                     //  
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  File name        : Decoder_enable_lines.v                                                                    //
+//  Version          : 0.2                                                                                       //
+//                                                                                                               //
+//  parameters used  : SELECT_ADDR1 : Value of the Nth bit of the address from the top module                    //
+//                     SELECT_ADDR2 : Value of N-1 bit of the address from the top module                        // 
+//                                                                                                               //
+//  Signals Used     : i_I : Top two bits of the input address for bank selection.                               //
+//                     o_y : One hot encoded output which asserts the enable signals of the bank one at a time.  //
+//                                                                                                               //
+//  File Description : This is a 2x4 selection decoder module that selects a certain bank at a time              //
+//                     based on the first two bits of the input address given from the top module.               //
+//                                                                                                               //  
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 
-module Decoder_enable_lines#( parameter SELECT_ADDR1 = 6,
+module decoder_enable_lines#( parameter SELECT_ADDR1 = 6,
                               parameter SELECT_ADDR2 = 5
-                            )(  input      [SELECT_ADDR1-1:SELECT_ADDR2-1] i_I, // Top two bits of the input address for bank selection.
-                                output reg [3:0]                           o_y  // One hot encoded output which asserts the enable signals of the bank one at a time.
+                            )(  input      [SELECT_ADDR1-1:SELECT_ADDR2-1] i_I, 
+                                output reg [3:0]                           o_y  
                              );
   
   //This procedural block defines the logic of a 2x4 decoder where the one-hot
